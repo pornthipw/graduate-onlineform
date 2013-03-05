@@ -1,0 +1,23 @@
+<div class="container-fluid" >
+  <div class="row-fluid">
+    <div class="span6">      
+      <div class="row-fluid">
+        <div class="span12" > 
+        <legend>Request</legend>
+          <ul>
+            <li ng-repeat="form in form_list">
+              {{form.type}} <a href="#/forms/{{form.type}}/{{form._id}}"> {{form.student.id}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+    <div class="span6">
+      <div class="row-fluid">
+        <div class="span12" > 
+           
+        </div>
+      </div>
+    </div>
+  </div>
+</div>            
