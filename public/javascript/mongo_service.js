@@ -36,6 +36,32 @@ app.factory('Program', function($resource) {
     return Program;    
 });
 
+app.factory('GradStaff', function($resource) {
+    var GradStaff= $resource(
+      'http://www.db.grad.nu.ac.th/django/rest/gradstaffs/:id', 
+      {callback:'JSON_CALLBACK'}, 
+      {
+	'query':  {method:'JSONP', isArray:true},
+	'get':  {method:'JSONP'}
+      });                         
+    return GradStaff;    
+});
+
+app.factory('Staff', function($resource) {
+    var Staff= $resource(
+      'http://www.db.grad.nu.ac.th/django/rest/staffs/:id', 
+      {callback:'JSON_CALLBACK'}, 
+      {
+	'query':  {method:'JSONP', isArray:true},
+	'get':  {method:'JSONP'}
+      });                         
+    return Staff;    
+});
+
+
+
+
+
 
 
 

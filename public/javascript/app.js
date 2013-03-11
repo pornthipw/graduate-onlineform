@@ -1,7 +1,6 @@
 var app = angular.module('form_file', [
   'mongo_service','$strap.directives']);
 
-
 app.config(function($routeProvider) {
   
   $routeProvider.when('/list', {
@@ -38,26 +37,86 @@ function getStudent(id, Student, Program, callback) {
     });
 }
 
-
 function FormController($scope, $routeParams, Form) {  
   
   Form.get({id:$routeParams.id}, function(form)  {    
     $scope.form = form;    
     $scope.templateUrl = 'static/forms/'+$routeParams.type+'/form.html';
   });
+  
+  $scope.download_form = function() {
+    Form.get({id:$scope.form._id},function(form) {
+        var dataUrl = '/form/download?form=' + JSON.stringify(form);      
+        var link = document.createElement('a');
+        angular.element(link).attr('href', dataUrl);
+        link.click();        
+    });
+  }
 }
 
-function FormCreateController($scope, $location, $routeParams, Student, Program, Form) {
+function FormCreateController($scope, $location, $routeParams, Student, Program, GradStaff, Staff, Form) {
   $scope.get_student = function() {
     getStudent($scope.form.student.id, Student, Program, function(r_student) {
       $scope.form.student = r_student;      
     });   
   }
+
+  GradStaff.query({},function(result){
+    $scope.grad_staff = result;
+  });
+    
+  $scope.get_gradstaff = function () {    
+    $scope.advisor_list = [];
+    //console.log($scope.form.advisor);
+    
+    angular.forEach($scope.grad_staff, function(staff) {       
+      if(staff.first_name.indexOf($scope.form.search_advisor)!=-1 || 
+        staff.last_name.indexOf($scope.form.search_advisor)!=-1) {         
+        $scope.advisor_list.push(staff);    
+      }      
+    });    
+    //console.log($scope.advisor_list);
+  }
+    
+  $scope.committee = [];
+  $scope.add_committee = function(staff) {
+    if(staff.selected) {
+      GradStaff.get({id:staff.id,
+        fields:JSON.stringify(['id','position','first_name','last_name']),
+        relations:JSON.stringify(['staff']),      
+      },function(res) {
+        //console.log("gradstaff"+res);
+        res['full_name'] = res.position+' '+res.first_name + ' '+res.last_name;
+        $scope.committee.push(res);
+        res.education = {level:''};
+        Staff.get({id:res.staff.id,
+          relations:JSON.stringify(['education']), 
+        },function(s_res) {
+          var e_list = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
+          angular.forEach(s_res.education, function(edu,index) {           
+            if(e_list.indexOf(edu['level']) >= e_list.indexOf(res.education['level'])) {
+              res.education = edu;
+            }           
+            });                        
+        });
+      });
+    } else {
+      var m_idx = -1;
+      angular.forEach($scope.committee, function(member, idx) {
+        if(member.id == staff.id) {
+          m_idx = idx;
+        }
+      });
+      if(m_idx != -1) {
+        $scope.committee.remove(m_idx);
+      }
+    }        
+  }    
   
   $scope.form = {};
   
-  $scope.save = function() {    
-    //$scope.dt = new Date();
+  $scope.save = function() {        
+    
     $scope.form['currentdate'] = new Date();      
     console.log($scope.form);    
     Form.save({}, $scope.form, function(result) {
@@ -74,14 +133,6 @@ function FormListController($scope, $location, $routeParams, Student, Program, F
     
   });
       
-  $scope.get_template = function (id) {
-    Form.get({},function(form) {
-        var dataUrl = '/form/gs11?form=' + JSON.stringify(form);      
-        var link = document.createElement('a');
-        angular.element(link).attr('href', dataUrl);
-        link.click();        
-    });
-  }
 }
 
 /*
@@ -89,4 +140,12 @@ function FormTemplateController($scope, $location, $routeParams, Student, Progra
   console.log("");
 }
 */
+
+
+
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
 

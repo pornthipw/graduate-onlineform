@@ -32,11 +32,11 @@ app.post('/db/:collection', mongo.insert);
 app.put('/db/:collection/:id', mongo.update);
 app.del('/db/:collection/:id', mongo.delete);
 
-app.get('/form/gs11', function(req, res) {
+app.get('/form/download', function(req, res) {
   //console.log(req.param.id);
   //var entry = {student_id:'38014309'};
   var form = JSON.parse(req.query.form);
-  res.set('Content-disposition', 'attachment; filename=gs11_'+form.student.id+'.xml');
+  res.set('Content-disposition', 'attachment; filename='+form.type+'_'+form.student.id+'.xml');
   
   res.render('forms/grad_11', {'form':form, layout:false});
   
