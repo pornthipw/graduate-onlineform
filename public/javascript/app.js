@@ -115,6 +115,11 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
   
   $scope.form = {};
   
+  
+  $scope.get_committee_info = function(committee) {
+    console.log(committee);
+  };
+  
   $scope.save = function() {        
     
     $scope.form['currentdate'] = new Date();      
