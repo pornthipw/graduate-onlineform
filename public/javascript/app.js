@@ -1,6 +1,21 @@
 var app = angular.module('form_file', [
   'mongo_service','$strap.directives']);
 
+app.filter('external_staff', function() {
+  return function(input, key) {
+    if(input) {
+      var result = [];
+      angular.forEach(input, function(v) {
+       console.log(v);
+        if(!v.external_staff) {
+          result.push(v);
+        }
+      });
+      return result;
+    }
+  }
+});
+
 app.config(function($routeProvider) {
   
   $routeProvider.when('/list', {
@@ -85,20 +100,28 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
         fields:JSON.stringify(['id','position','first_name','last_name']),
         relations:JSON.stringify(['staff']),      
       },function(res) {
-        //console.log("gradstaff"+res);
-        res['full_name'] = res.position+' '+res.first_name + ' '+res.last_name;
-        $scope.committee.push(res);
-        res.education = {level:''};
-        Staff.get({id:res.staff.id,
-          relations:JSON.stringify(['education']), 
-        },function(s_res) {
-          var e_list = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
-          angular.forEach(s_res.education, function(edu,index) {           
-            if(e_list.indexOf(edu['level']) >= e_list.indexOf(res.education['level'])) {
-              res.education = edu;
-            }           
-            });                        
-        });
+        res['full_name'] = '';
+        if(res.position) {
+          res['full_name'] = res.position+' ';
+        } 
+        res['full_name'] += res.first_name + ' '+res.last_name;
+        $scope.committee.push(res);        
+        if (res.staff['id']) {        
+          res.education = {level:''};
+          Staff.get({id:res.staff.id,
+            relations:JSON.stringify(['education']), 
+          },function(s_res) {
+            var e_list = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
+            angular.forEach(s_res.education, function(edu,index) {           
+              if(e_list.indexOf(edu['level']) >= e_list.indexOf(res.education['level'])) {
+                res.education = edu;
+              }           
+              });                        
+          });
+        } else {
+          res['external_staff'] = true;
+          staff['external_staff'] = true;
+        }
       });
     } else {
       var m_idx = -1;
@@ -117,7 +140,18 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
   
   
   $scope.get_committee_info = function(committee) {
-    console.log(committee);
+    //console.log(committee);
+    committee['active_advised'] = 0;
+    GradStaff.get({id:committee.id,
+        relations:JSON.stringify(['students']),      
+      },function(res) { 
+        angular.forEach(res.students, function(student){
+          if (student.status_code==10 || student.status_code==11) {
+              committee.active_advised++;
+          } 
+        });
+        console.log(res);
+    });
   };
   
   $scope.save = function() {        
@@ -125,7 +159,7 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
     $scope.form['currentdate'] = new Date();      
     console.log($scope.form);    
     Form.save({}, $scope.form, function(result) {
-        console.log(result);
+        //console.log(result);
         $location.path('/list');
     });
     
