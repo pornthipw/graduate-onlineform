@@ -28,7 +28,7 @@ app.config(function($routeProvider) {
     templateUrl:'static/forms/route.html'
   });
   
-  $routeProvider.when('/forms', {
+  $routeProvider.when('/forms/:type', {
     controller:FormCreateController, 
     templateUrl:'static/forms/gs11/form.html'
   });
@@ -60,7 +60,7 @@ function FormController($scope, $routeParams, Form) {
   });
   
   $scope.download_form = function() {
-    console.log($scope.form._id);
+    //console.log($scope.form._id);
     Form.get({id:$scope.form._id},function(form) {
         var dataUrl = '/form/download?form=' + JSON.stringify(form);      
         var link = document.createElement('a');
@@ -151,12 +151,12 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
               committee.active_advised++;
           } 
         });
-        console.log(res);
+        //console.log(res);
     });
   };
   
   $scope.save = function() {        
-    
+    $scope.form['type'] = $routeParams.type;
     $scope.form['currentdate'] = new Date();      
     //console.log($scope.form);    
     Form.save({}, $scope.form, function(result) {
