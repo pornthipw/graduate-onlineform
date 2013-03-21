@@ -6,7 +6,7 @@ app.filter('external_staff', function() {
     if(input) {
       var result = [];
       angular.forEach(input, function(v) {
-       console.log(v);
+       //console.log(v);
         if(!v.external_staff) {
           result.push(v);
         }
@@ -60,6 +60,7 @@ function FormController($scope, $routeParams, Form) {
   });
   
   $scope.download_form = function() {
+    console.log($scope.form._id);
     Form.get({id:$scope.form._id},function(form) {
         var dataUrl = '/form/download?form=' + JSON.stringify(form);      
         var link = document.createElement('a');
@@ -97,7 +98,7 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
   $scope.add_committee = function(staff) {
     if(staff.selected) {
       GradStaff.get({id:staff.id,
-        fields:JSON.stringify(['id','position','first_name','last_name']),
+        fields:JSON.stringify(['id','position','first_name','last_name','faculty']),
         relations:JSON.stringify(['staff']),      
       },function(res) {
         res['full_name'] = '';
@@ -157,7 +158,7 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
   $scope.save = function() {        
     
     $scope.form['currentdate'] = new Date();      
-    console.log($scope.form);    
+    //console.log($scope.form);    
     Form.save({}, $scope.form, function(result) {
         //console.log(result);
         $location.path('/list');
