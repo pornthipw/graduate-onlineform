@@ -33,6 +33,11 @@ app.config(function($routeProvider) {
     templateUrl:'static/forms/gs11/form.html'
   });
   
+  $routeProvider.when('/', {
+    controller:MainController, 
+    templateUrl:'static/index.html'
+  });
+  
 });
 
 function getStudent(id, Student, Program, callback) {
@@ -50,6 +55,10 @@ function getStudent(id, Student, Program, callback) {
         callback(r_student);
       });      
     });
+}
+
+function MainController($scope, $routeParams) {  
+  
 }
 
 function FormController($scope, $routeParams, Form) {  

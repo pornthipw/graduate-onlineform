@@ -1,6 +1,6 @@
 var app = angular.module('mongo_service', ['ngResource']);
 
-//var prefix = '/apps/confile';
+//var prefix = '/apps/onlineform';
 var prefix = '';
 
 
