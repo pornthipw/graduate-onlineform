@@ -1,7 +1,7 @@
 var app = angular.module('mongo_service', ['ngResource']);
 
-//var prefix = '/apps/onlineform';
-var prefix = '';
+var prefix = '/apps/onlineform';
+//var prefix = '';
 
 
 app.factory('Form', function($resource) {
