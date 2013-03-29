@@ -71,7 +71,7 @@ function FormController($scope, $routeParams, Form) {
   $scope.download_form = function() {
     //console.log($scope.form._id);
     Form.get({id:$scope.form._id},function(form) {
-        var dataUrl = '/form/download?form=' + JSON.stringify(form);      
+        var dataUrl = 'form/download?form=' + JSON.stringify(form);      
         var link = document.createElement('a');
         angular.element(link).attr('href', dataUrl);
         link.click();        
