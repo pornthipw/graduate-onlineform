@@ -55,7 +55,7 @@
           
           <fieldset>
             <legend>Thesis Committee</legend>
-            <label><b>Advisor:</b> {{form.advisor.full_name}} {{form.advisor.education.level}}   {{form.advisor.active_advised}}</label>
+            <label><b>Advisor:</b> {{form.advisor.full_name}} {{form.advisor.education.level}}   {{form.advisor.active_advised}} {{form.advisor.work}}</label>
             <select ng-model="form.advisor" ng-change="get_committee_info(form.advisor)" ng-options="st.full_name for st in committee|external_staff"></select>
             <label><b>Comittee:</b> {{form.committee1.full_name}} {{form.committee1.education.level}} {{form.committee1.active_advised}}</label>
             <select ng-model="form.committee1" ng-change="get_committee_info(form.committee1)" ng-options="st.full_name for st in committee"></select>

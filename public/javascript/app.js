@@ -107,7 +107,7 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
   $scope.add_committee = function(staff) {
     if(staff.selected) {
       GradStaff.get({id:staff.id,
-        fields:JSON.stringify(['id','position','first_name','last_name','faculty']),
+        fields:JSON.stringify(['id','position','first_name','last_name','faculty','work']),
         relations:JSON.stringify(['staff']),      
       },function(res) {
         res['full_name'] = '';
@@ -122,10 +122,13 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
             relations:JSON.stringify(['education']), 
           },function(s_res) {
             var e_list = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
-            angular.forEach(s_res.education, function(edu,index) {           
+            angular.forEach(s_res.education, function(edu,index) { 
+                       
               if(e_list.indexOf(edu['level']) >= e_list.indexOf(res.education['level'])) {
                 res.education = edu;
-              }           
+              } 
+               
+                         
               });                        
           });
         } else {
