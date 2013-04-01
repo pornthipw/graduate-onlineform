@@ -115,21 +115,23 @@ function FormCreateController($scope, $location, $routeParams, Student, Program,
           res['full_name'] = res.position+' ';
         } 
         res['full_name'] += res.first_name + ' '+res.last_name;
+        
         $scope.committee.push(res);        
         if (res.staff['id']) {        
           res.education = {level:''};
           Staff.get({id:res.staff.id,
             relations:JSON.stringify(['education']), 
           },function(s_res) {
-            var e_list = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
-            angular.forEach(s_res.education, function(edu,index) { 
+            res.education =s_res.education ;
+            //var e_list = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
+            //angular.forEach(s_res.education, function(edu,index) { 
                        
-              if(e_list.indexOf(edu['level']) >= e_list.indexOf(res.education['level'])) {
-                res.education = edu;
-              } 
+              //if(e_list.indexOf(edu['level']) >= e_list.indexOf(res.education['level'])) {
+              //  res.education = edu;
+              //} 
                
-                         
-              });                        
+    
+             // });                        
           });
         } else {
           res['external_staff'] = true;

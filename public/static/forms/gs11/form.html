@@ -57,12 +57,17 @@
             <legend>Thesis Committee</legend>
             <label><b>Advisor:</b> {{form.advisor.full_name}} {{form.advisor.education.level}}   {{form.advisor.active_advised}} {{form.advisor.work}}</label>
             <select ng-model="form.advisor" ng-change="get_committee_info(form.advisor)" ng-options="st.full_name for st in committee|external_staff"></select>
+            <select ng-model="form.advisor.level.heigh"  ng-options="d.level for d in form.advisor.education"></select>
+             <select ng-model="form.advisor.level.low"  ng-options="d.level for d in form.advisor.education"></select>
             <label><b>Comittee:</b> {{form.committee1.full_name}} {{form.committee1.education.level}} {{form.committee1.active_advised}}</label>
             <select ng-model="form.committee1" ng-change="get_committee_info(form.committee1)" ng-options="st.full_name for st in committee"></select>
+            <select ng-model="form.committee1.level.heigh"  ng-options="d.level for d in form.committee1.education"></select>
             <label><b>Comittee: </b>{{form.committee2.full_name}} {{form.committee2.education.level}} {{form.committee2.active_advised}}</label>
             <select ng-model="form.committee2" ng-change="get_committee_info(form.committee2)" ng-options="st.full_name for st in committee"></select>
+            <select ng-model="form.committee2.level.heigh"  ng-options="d.level for d in form.committee2.education"></select>
             <label><b>Comittee: </b>{{form.committee3.full_name}} {{form.committee3.education.level}} {{form.committee3.active_advised}}</label>
             <select ng-model="form.committee3" ng-change="get_committee_info(form.committee3)" ng-options="st.full_name for st in committee"></select>
+            <select ng-model="form.committee3.level.heigh"  ng-options="d.level for d in form.committee3.education"></select>
           </fieldset>
           
           <a href="" ng-click="save()" class="btn"> 
